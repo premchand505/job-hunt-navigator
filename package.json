@@ -1,0 +1,24 @@
+{
+  "name": "job-hunt-navigator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/premchand505/job-hunt-navigator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/premchand505/job-hunt-navigator/issues"
+  },
+  "homepage": "https://github.com/premchand505/job-hunt-navigator#readme",
+  "description": "",
+  "workspaces": [
+    "packages/extension",
+    "packages/dashboard"
+  ]
+}

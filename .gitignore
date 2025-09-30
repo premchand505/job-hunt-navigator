@@ -1,0 +1,14 @@
+# Dependencies
+/node_modules
+/*/node_modules
+
+# Build artifacts
+/packages/dashboard/dist
+/packages/extension/dist
+
+# Env files
+.env
+*.env.local
+
+# IDE config
+.vscode/
