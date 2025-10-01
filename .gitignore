@@ -1,10 +1,12 @@
 # Dependencies
-/node_modules
-/*/node_modules
+node_modules/
+/packages/*/node_modules
+
+# Vite build cache
+/packages/*/.vite/
 
 # Build artifacts
-/packages/dashboard/dist
-/packages/extension/dist
+/packages/*/dist/
 
 # Env files
 .env
@@ -12,3 +14,7 @@
 
 # IDE config
 .vscode/
+
+# OS-specific
+.DS_Store
+Thumbs.db
