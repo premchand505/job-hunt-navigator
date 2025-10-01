@@ -7,8 +7,17 @@
     "service_worker": "dist/service-worker.js",
     "type": "module"
   },
+  "action":{
+"default_title":"Save this job"
+  },
   "permissions": [
-    "identity"
+    "identity",
+    "scripting",
+    "debugger",
+    "tabs"
+  ],
+    "host_permissions": [
+    "<all_urls>"
   ],
   "oauth2": {
     "client_id":  "1076648023703-tr7smnahn0p3po57rk8lnijcv69hqpi5.apps.googleusercontent.com",
@@ -21,5 +30,15 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content-scripts/scraper.js",
+        "content-scripts/ui-injector.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
