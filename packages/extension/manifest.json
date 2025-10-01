@@ -1,44 +1,49 @@
-{
-  "manifest_version": 3,
-  "name": "Job Hunt Navigator",
-  "version": "1.0",
-  "description": "Save and track job applications with one click.",
-  "background": {
-    "service_worker": "dist/service-worker.js",
-    "type": "module"
-  },
-  "action":{
-"default_title":"Save this job"
-  },
-  "permissions": [
-    "identity",
-    "scripting",
-    "debugger",
-    "tabs"
-  ],
-    "host_permissions": [
-    "<all_urls>"
-  ],
-  "oauth2": {
-    "client_id":  "1076648023703-tr7smnahn0p3po57rk8lnijcv69hqpi5.apps.googleusercontent.com",
-    "scopes": [
-      "https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/userinfo.profile"
-    ]
-  },
-  "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
-  },
-  
-  "web_accessible_resources": [
+
+
     {
-      "resources": [
-        "content-scripts/scraper.js",
-        "content-scripts/ui-injector.js"
+      "manifest_version": 3,
+      "name": "Job Hunt Navigator",
+      "version": "1.0",
+      "description": "Save and track job applications with one click.",
+      
+      "options_page": "dashboard/index.html",
+
+      "background": {
+        "service_worker": "dist/service-worker.js",
+        "type": "module"
+      },
+      "permissions": [
+        "identity",
+        "scripting",
+        "debugger",
+        "tabs"
       ],
-      "matches": ["<all_urls>"]
+      "host_permissions": [
+        "<all_urls>"
+      ],
+      "oauth2": {
+        "client_id":  "1076648023703-tr7smnahn0p3po57rk8lnijcv69hqpi5.apps.googleusercontent.com",
+        "scopes": [
+          "https://www.googleapis.com/auth/userinfo.email",
+          "https://www.googleapis.com/auth/userinfo.profile"
+        ]
+      },
+      "action": {
+        "default_title": "Save this Job"
+      },
+      "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+      },
+      "web_accessible_resources": [
+        {
+          "resources": [
+            "content-scripts/scraper.js",
+            "content-scripts/ui-injector.js"
+          ],
+          "matches": ["<all_urls>"]
+        }
+      ]
     }
-  ]
-}
+    
