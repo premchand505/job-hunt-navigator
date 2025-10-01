@@ -37,6 +37,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [jobToDelete, setJobToDelete] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(''); // <-- NEW: State for the search term
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
@@ -75,7 +76,6 @@ function App() {
     return () => unsubscribeFirestore();
   }, [user]);
   
-  // --- NEW: Sign-in and Sign-out Handlers ---
   const handleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
@@ -94,11 +94,11 @@ function App() {
   };
 
   const handleDelete = async () => {
+    // ... (This function is unchanged)
     if (!jobToDelete) return;
     try {
       const jobRef = doc(db, 'jobs', jobToDelete.id);
       await deleteDoc(jobRef);
-      console.log(`Job with ID ${jobToDelete.id} deleted successfully.`);
     } catch (error) {
       console.error("Error deleting job: ", error);
     } finally {
@@ -119,12 +119,19 @@ function App() {
     return 'Invalid Date';
   };
 
+  // --- NEW: Filter jobs based on search term ---
+  const filteredJobs = jobs.filter(job => 
+    job.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    job.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    job.location?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (loading) {
       return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white text-xl">Loading...</div>
   }
 
-  // --- NEW: Conditional rendering for login screen ---
   if (!user) {
+    // ... (Login screen is unchanged)
     return (
       <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center text-white">
         <h1 className="text-5xl font-bold mb-4">Job Hunt Navigator</h1>
@@ -150,7 +157,7 @@ function App() {
       )}
       <div className="min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
-          <header className="mb-8 flex justify-between items-center">
+          <header className="mb-8 flex justify-between items-center flex-wrap gap-4">
             <div>
               <h1 className="text-4xl font-bold text-white">Job Hunt Navigator</h1>
               <p className="text-lg text-gray-400 mt-1">Your saved job applications.</p>
@@ -163,11 +170,23 @@ function App() {
             </button>
           </header>
           
+          {/* --- NEW: Search Bar --- */}
+          <div className="mb-6">
+            <input
+              type="text"
+              placeholder="Search by title, company, or location..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+            />
+          </div>
+
           <main>
             <div className="bg-gray-800 shadow-lg rounded-lg overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-700">
                   <thead className="bg-gray-700">
+                    {/* ... (Table headers are unchanged) ... */}
                     <tr>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Job Title</th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Company</th>
@@ -177,9 +196,15 @@ function App() {
                     </tr>
                   </thead>
                   <tbody className="bg-gray-800 divide-y divide-gray-700">
-                     {jobs.length > 0 ? (
-                      jobs.map((job) => (
+                    {loading ? (
+                      <tr>
+                        <td colSpan="5" className="text-center py-10 text-gray-400">Loading jobs...</td>
+                      </tr>
+                    // --- MODIFIED: Use filteredJobs here ---
+                    ) : filteredJobs.length > 0 ? (
+                      filteredJobs.map((job) => (
                         <tr key={job.id} className="hover:bg-gray-700 transition-colors duration-200">
+                          {/* ... (Table row content is unchanged) ... */}
                           <td className="px-6 py-4 whitespace-nowrap">
                             <a href={job.url} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 font-semibold">{job.title}</a>
                             <p className="text-sm text-gray-400">{job.location}</p>
@@ -200,7 +225,7 @@ function App() {
                     ) : (
                       <tr>
                         <td colSpan="5" className="text-center py-10 text-gray-400">
-                          No jobs saved yet. Try saving a job from a supported site!
+                          {searchTerm ? `No jobs found for "${searchTerm}"` : "No jobs saved yet."}
                         </td>
                       </tr>
                     )}
